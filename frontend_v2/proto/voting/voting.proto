@@ -1,0 +1,59 @@
+// 指定使用 proto3 语法
+syntax = "proto3";
+
+// 定义包名
+package voting;
+
+// 指定 Go 包路径
+option go_package = "voting-service/gen/voting";
+
+// 定义投票服务
+service VotingService {
+  // 获取投票主题和选项
+  rpc GetVotingOptions(GetVotingOptionsRequest) returns (GetVotingOptionsResponse) {}
+  // 提交投票
+  rpc Vote(VoteRequest) returns (VoteResponse) {}
+  // 获取投票结果
+  rpc GetResults(GetResultsRequest) returns (GetResultsResponse) {}
+}
+
+// 获取投票选项的请求（空请求）
+message GetVotingOptionsRequest {}
+
+// 获取投票选项的响应
+message GetVotingOptionsResponse {
+  string topic = 1;  // 投票主题
+  repeated Option options = 2;  // 选项列表
+}
+
+// 投票选项定义
+message Option {
+  string id = 1;  // 选项ID
+  string text = 2; // 选项文本
+}
+
+// 投票请求
+message VoteRequest {
+  string option_id = 1;  // 要投票的选项ID
+}
+
+// 投票响应
+message VoteResponse {
+  bool success = 1;  // 投票是否成功
+  string message = 2; // 响应消息
+}
+
+// 获取结果请求（空请求）
+message GetResultsRequest {}
+
+// 获取结果响应
+message GetResultsResponse {
+  repeated Result results = 1;  // 结果列表
+}
+
+// 投票结果定义
+message Result {
+  string option_id = 1;  // 选项ID
+  string option_text = 2; // 选项文本
+  int32 votes = 3;       // 票数
+}
